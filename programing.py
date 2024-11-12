@@ -28,3 +28,23 @@ data = data.set_index('Fecha')
 data.fillna(0, inplace=True)  # Reemplazar valores nulos con 0
 
 # A partir de aquí, el resto del código sigue igual para cálculos de ratios, evaluación de viabilidad, pronósticos, etc.
+
+# Supongamos que 'Ingresos' representa los ingresos totales y 'Gastos' los gastos totales
+
+# Ratio de Rentabilidad Bruta
+data['Ratio_Rentabilidad_Bruta'] = data['Ingresos'] / (data['Ingresos'] + data['Gastos'])
+
+# Ratio de Liquidez (si tienes una columna de activos y pasivos)
+data['Ratio_Liquidez'] = data['Activos'] / data['Pasivos']  # Ejemplo
+
+# Otros ratios financieros, como ROI (Return on Investment) o ROE (Return on Equity), también pueden calcularse
+
+# Evaluar si los ingresos son consistentemente mayores que los gastos
+data['Viable'] = data['Ingresos'] > data['Gastos']
+
+# Agregar una métrica de viabilidad en función de un margen mínimo de ingresos sobre gastos
+data['Margen_de_Seguridad'] = (data['Ingresos'] - data['Gastos']) / data['Ingresos']
+
+# Considerar viable si el margen de seguridad supera un umbral, por ejemplo, el 20%
+data['Es_Viable'] = data['Margen_de_Seguridad'] > 0.20
+ 
