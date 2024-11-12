@@ -70,4 +70,3 @@ plt.xlabel("Fecha")
 plt.ylabel("Ingresos")
 plt.legend()
 plt.show()
-
