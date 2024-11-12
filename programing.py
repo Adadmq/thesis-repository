@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error
+from sklearn.model_selection import train_test_split
 
 # Cargar los datos (reemplaza 'your-data-file.csv' por el nombre del archivo CSV correspondiente)
 # Ejemplo para balance_sheet.csv, income_statement.csv y cash_flow.csv
@@ -48,3 +49,25 @@ data['Margen_de_Seguridad'] = (data['Ingresos'] - data['Gastos']) / data['Ingres
 # Considerar viable si el margen de seguridad supera un umbral, por ejemplo, el 20%
 data['Es_Viable'] = data['Margen_de_Seguridad'] > 0.20
  
+ # Crear datos de entrenamiento y prueba para el modelo
+# Suponiendo que queremos predecir 'Ingresos' usando el índice temporal
+data['Fecha_num'] = data.index.map(pd.Timestamp.toordinal)  # Convertir la fecha a número para regresión
+X = data[['Fecha_num']]
+y = data['Ingresos']
+
+# Dividir en datos de entrenamiento y prueba
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+
+# Entrenar el modelo de regresión lineal
+model = LinearRegression()
+model.fit(X_train, y_train)
+
+# Predecir ingresos futuros
+data['Prediccion_Ingresos'] = model.predict(X)  # Predicción en todo el rango de fechasplt.figure(figsize=(10, 6))
+plt.plot(data.index, data['Ingresos'], label="Ingresos Reales")
+plt.plot(data.index, data['Prediccion_Ingresos'], linestyle='--', label="Predicción Ingresos")
+plt.xlabel("Fecha")
+plt.ylabel("Ingresos")
+plt.legend()
+plt.show()
+
